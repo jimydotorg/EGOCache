@@ -382,4 +382,13 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 
 }
 
+- (NSURL*)urlForKey:(NSString*)key {
+  if ([self hasCacheForKey:key]) {
+    NSURL* wtf = [NSURL fileURLWithPath:cachePathForKey(_directory, key)];
+    return wtf;
+  } else {
+    return nil;
+  }
+}
+
 @end

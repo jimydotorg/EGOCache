@@ -70,6 +70,8 @@
 - (void)setPlist:(id)plistObject forKey:(NSString*)key;
 - (void)setPlist:(id)plistObject forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
 
+- (NSURL*)urlForKey:(NSString*)key;
+
 - (void)copyFilePath:(NSString*)filePath asKey:(NSString*)key;
 - (void)copyFilePath:(NSString*)filePath asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;	
 
