@@ -47,7 +47,9 @@
 
 - (NSData*)dataForKey:(NSString*)key;
 - (void)setData:(NSData*)data forKey:(NSString*)key;
+- (void)setData:(NSData*)data forKey:(NSString*)key completion:(void(^)(BOOL)) completion;
 - (void)setData:(NSData*)data forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
+- (void)setData:(NSData*)data forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval completion:(void(^)(BOOL)) completion;
 
 - (NSString*)stringForKey:(NSString*)key;
 - (void)setString:(NSString*)aString forKey:(NSString*)key;

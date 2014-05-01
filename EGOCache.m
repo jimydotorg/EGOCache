@@ -229,18 +229,30 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 
 #pragma mark -
 #pragma mark Data methods
-
-- (void)setData:(NSData*)data forKey:(NSString*)key {
-	[self setData:data forKey:key withTimeoutInterval:self.defaultTimeoutInterval];
+- (void)setData:(NSData *)data forKey:(NSString *)key {
+    [self setData:data forKey:key completion:nil];
 }
 
-- (void)setData:(NSData*)data forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval {
+- (void)setData:(NSData*)data forKey:(NSString*)key completion:(void(^)(BOOL)) completion {
+	[self setData:data forKey:key withTimeoutInterval:self.defaultTimeoutInterval completion:completion];
+}
+
+- (void)setData:(NSData*)data
+         forKey:(NSString*)key
+withTimeoutInterval:(NSTimeInterval)timeoutInterval
+        completion:(void(^)(BOOL)) completion
+{
 	CHECK_FOR_EGOCACHE_PLIST();
 	
 	NSString* cachePath = cachePathForKey(_directory, key);
 	
 	dispatch_async(_diskQueue, ^{
-		[data writeToFile:cachePath atomically:YES];
+		BOOL success = [data writeToFile:cachePath atomically:YES];
+        if(completion) {
+            on_main(^{
+                completion(success);
+            });
+        }
 	});
 	
 	[self setCacheTimeoutInterval:timeoutInterval forKey:key];
