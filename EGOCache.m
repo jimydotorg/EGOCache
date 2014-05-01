@@ -233,14 +233,14 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
     [self setData:data forKey:key completion:nil];
 }
 
-- (void)setData:(NSData*)data forKey:(NSString*)key completion:(void(^)(BOOL)) completion {
+- (void)setData:(NSData*)data forKey:(NSString*)key completion:(void(^)(NSURL*)) completion {
 	[self setData:data forKey:key withTimeoutInterval:self.defaultTimeoutInterval completion:completion];
 }
 
 - (void)setData:(NSData*)data
          forKey:(NSString*)key
 withTimeoutInterval:(NSTimeInterval)timeoutInterval
-        completion:(void(^)(BOOL)) completion
+        completion:(void(^)(NSURL*)) completion
 {
 	CHECK_FOR_EGOCACHE_PLIST();
 	
@@ -248,9 +248,10 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 	
 	dispatch_async(_diskQueue, ^{
 		BOOL success = [data writeToFile:cachePath atomically:YES];
+        NSURL *url = success ? [self urlForKey:key] : nil;
         if(completion) {
             on_main(^{
-                completion(success);
+                completion(url);
             });
         }
 	});
