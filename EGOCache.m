@@ -240,6 +240,13 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 - (void)setData:(NSData*)data
          forKey:(NSString*)key
 withTimeoutInterval:(NSTimeInterval)timeoutInterval
+{
+    [self setData:data forKey:key withTimeoutInterval:timeoutInterval completion:nil];
+}
+
+- (void)setData:(NSData*)data
+         forKey:(NSString*)key
+withTimeoutInterval:(NSTimeInterval)timeoutInterval
         completion:(void(^)(NSURL*)) completion
 {
 	CHECK_FOR_EGOCACHE_PLIST();
