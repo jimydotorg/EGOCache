@@ -252,7 +252,6 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 	CHECK_FOR_EGOCACHE_PLIST();
 	
 	NSString* cachePath = cachePathForKey(_directory, key);
-	
 	dispatch_async(_diskQueue, ^{
 		BOOL success = [data writeToFile:cachePath atomically:YES];
         NSURL *url = success ? [self urlForKey:key] : nil;
@@ -405,6 +404,26 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 - (NSURL*)urlForKey:(NSString*)key {
     NSURL* wtf = [NSURL fileURLWithPath:cachePathForKey(_directory, key)];
     return wtf;
+}
+
+- (void)moveFilePath:(NSString*)filePath asKey:(NSString*)key {
+    [self moveFilePath:filePath asKey:key withTimeoutInterval:self.defaultTimeoutInterval];
+}
+
+- (void)moveFilePath:(NSString*)filePath asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval {
+    dispatch_async(_diskQueue, ^{
+        [[NSFileManager defaultManager] moveItemAtPath:filePath toPath:cachePathForKey(_directory, key) error:NULL];
+    });
+
+    [self setCacheTimeoutInterval:timeoutInterval forKey:key];
+}
+
+- (void)moveFileUrl:(NSURL*)fileUrl asKey:(NSString*)key {
+    [self moveFilePath:[fileUrl path] asKey:key withTimeoutInterval:self.defaultTimeoutInterval];
+}
+
+- (void)moveFileUrl:(NSURL*)fileUrl asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval {
+    [self moveFilePath:[fileUrl path] asKey:key withTimeoutInterval:timeoutInterval];
 }
 
 @end

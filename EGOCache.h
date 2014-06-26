@@ -82,4 +82,11 @@
 - (void)setObject:(id<NSCoding>)anObject forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
 
 @property(nonatomic,assign) NSTimeInterval defaultTimeoutInterval; // Default is 1 day
+
+- (void)moveFilePath:(NSString*)filePath asKey:(NSString*)key;
+- (void)moveFilePath:(NSString*)filePath asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
+
+- (void)moveFileUrl:(NSURL*)fileUrl asKey:(NSString*)key;
+- (void)moveFileUrl:(NSURL*)fileUrl asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
+
 @end
