@@ -249,20 +249,20 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 withTimeoutInterval:(NSTimeInterval)timeoutInterval
         completion:(void(^)(NSURL*)) completion
 {
-	CHECK_FOR_EGOCACHE_PLIST();
-	
-	NSString* cachePath = cachePathForKey(_directory, key);
-	dispatch_async(_diskQueue, ^{
-		BOOL success = [data writeToFile:cachePath atomically:YES];
+    CHECK_FOR_EGOCACHE_PLIST();
+
+    NSString* cachePath = cachePathForKey(_directory, key);
+    dispatch_async(_diskQueue, ^{
+        BOOL success = [data writeToFile:cachePath atomically:YES];
         NSURL *url = success ? [self urlForKey:key] : nil;
         if(completion) {
-            on_main(^{
+            dispatch_async(_cacheInfoQueue, ^{
                 completion(url);
             });
         }
-	});
-	
-	[self setCacheTimeoutInterval:timeoutInterval forKey:key];
+    });
+
+    [self setCacheTimeoutInterval:timeoutInterval forKey:key];
 }
 
 - (void)setNeedsSave {
