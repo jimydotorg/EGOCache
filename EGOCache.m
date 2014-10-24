@@ -354,13 +354,13 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 #pragma mark -
 #pragma mark Property List methods
 
-- (NSData*)plistForKey:(NSString*)key; {  
-	NSData* plistData = [self dataForKey:key];
-	
-	return [NSPropertyListSerialization propertyListFromData:plistData
-											mutabilityOption:NSPropertyListImmutable
-													  format:nil
-											errorDescription:nil];
+- (id)plistForKey:(NSString*)key; {
+    NSData* plistData = [self dataForKey:key];
+
+    return [NSPropertyListSerialization propertyListFromData:plistData
+                                            mutabilityOption:NSPropertyListImmutable
+                                                      format:nil
+                                            errorDescription:nil];
 }
 
 - (void)setPlist:(id)plistObject forKey:(NSString*)key; {
