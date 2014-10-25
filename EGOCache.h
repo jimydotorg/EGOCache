@@ -89,4 +89,7 @@
 - (void)moveFileUrl:(NSURL*)fileUrl asKey:(NSString*)key;
 - (void)moveFileUrl:(NSURL*)fileUrl asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
 
+- (void)reloadCacheInfo;
+- (UIImage*)imageFromDataForKey:(NSString *)key;
+
 @end
