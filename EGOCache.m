@@ -221,10 +221,20 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 
 - (void)copyFilePath:(NSString*)filePath asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval {
   dispatch_async(_diskQueue, ^{
-    [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:cachePathForKey(_directory, key) error:NULL];
+    NSString* targetPath = cachePathForKey(_directory, key);
+    [[NSFileManager defaultManager] removeItemAtPath:targetPath error:NULL];
+    [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:targetPath error:NULL];
   });
 
   [self setCacheTimeoutInterval:timeoutInterval forKey:key];
+}
+
+- (void)copyFileUrl:(NSURL*)fileUrl asKey:(NSString*)key {
+  [self copyFilePath:[fileUrl path] asKey:key withTimeoutInterval:self.defaultTimeoutInterval];
+}
+
+- (void)copyFileUrl:(NSURL*)fileUrl asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval {
+  [self copyFilePath:[fileUrl path] asKey:key withTimeoutInterval:timeoutInterval];
 }
 
 #pragma mark -
@@ -412,7 +422,9 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 
 - (void)moveFilePath:(NSString*)filePath asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval {
   dispatch_async(_diskQueue, ^{
-    [[NSFileManager defaultManager] moveItemAtPath:filePath toPath:cachePathForKey(_directory, key) error:NULL];
+    NSString* targetPath = cachePathForKey(_directory, key);
+    [[NSFileManager defaultManager] removeItemAtPath:targetPath error:NULL];
+    [[NSFileManager defaultManager] moveItemAtPath:filePath toPath:targetPath error:NULL];
   });
 
   [self setCacheTimeoutInterval:timeoutInterval forKey:key];

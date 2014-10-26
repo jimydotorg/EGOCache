@@ -77,6 +77,9 @@
 - (void)copyFilePath:(NSString*)filePath asKey:(NSString*)key;
 - (void)copyFilePath:(NSString*)filePath asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;	
 
+- (void)copyFileUrl:(NSURL*)fileUrl asKey:(NSString*)key;
+- (void)copyFileUrl:(NSURL*)fileUrl asKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
+
 - (id<NSCoding>)objectForKey:(NSString*)key;
 - (void)setObject:(id<NSCoding>)anObject forKey:(NSString*)key;
 - (void)setObject:(id<NSCoding>)anObject forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
