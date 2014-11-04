@@ -439,10 +439,12 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 }
 
 - (void)reloadCacheInfo {
-  dispatch_sync(_frozenCacheInfoQueue, ^{
-    _cacheInfo = [[NSDictionary dictionaryWithContentsOfFile:cachePathForKey(_directory, @"EGOCache.plist")] mutableCopy];
-    self.frozenCacheInfo = [_cacheInfo copy];
-		});
+  dispatch_sync(_cacheInfoQueue, ^{
+    dispatch_sync(_frozenCacheInfoQueue, ^{
+      _cacheInfo = [[NSDictionary dictionaryWithContentsOfFile:cachePathForKey(_directory, @"EGOCache.plist")] mutableCopy] ?: [NSMutableDictionary new];
+      self.frozenCacheInfo = [_cacheInfo copy];
+    });
+  });
 }
 
 - (UIImage*)imageFromDataForKey:(NSString *)key {
