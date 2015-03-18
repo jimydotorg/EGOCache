@@ -112,7 +112,6 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
     for(NSString* key in _cacheInfo) {
       if([_cacheInfo[key] timeIntervalSinceReferenceDate] <= now) {
         [[NSFileManager defaultManager] removeItemAtPath:cachePathForKey(_directory, key) error:NULL];
-        NSLog(@"remove cache item %@", key);
         [removedKeys addObject:key];
       }
     }
@@ -450,6 +449,10 @@ withTimeoutInterval:(NSTimeInterval)timeoutInterval
 - (UIImage*)imageFromDataForKey:(NSString *)key {
   NSString* filename = [[self urlForKey:key] path];
   return [UIImage imageWithContentsOfFile:filename];
+}
+
+- (void)waitForDisk {
+  dispatch_barrier_sync(_diskQueue, ^{});
 }
 
 @end

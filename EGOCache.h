@@ -95,4 +95,6 @@
 - (void)reloadCacheInfo;
 - (UIImage*)imageFromDataForKey:(NSString *)key;
 
+- (void)waitForDisk;
+
 @end
