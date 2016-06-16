@@ -140,6 +140,29 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
   });
 }
 
+- (void)pruneCache {
+    dispatch_sync(_cacheInfoQueue, ^{
+
+        NSTimeInterval now = [[NSDate date] timeIntervalSinceReferenceDate];
+        NSMutableArray* removedKeys = [[NSMutableArray alloc] init];
+
+        for(NSString* key in _cacheInfo) {
+            if([_cacheInfo[key] timeIntervalSinceReferenceDate] <= now) {
+                [[NSFileManager defaultManager] removeItemAtPath:cachePathForKey(_directory, key) error:NULL];
+                [removedKeys addObject:key];
+            }
+        }
+
+        [_cacheInfo removeObjectsForKeys:removedKeys];
+
+        dispatch_sync(_frozenCacheInfoQueue, ^{
+            self.frozenCacheInfo = [_cacheInfo copy];
+        });
+
+        [self setNeedsSave];
+    });
+}
+
 - (void)removeCacheForKey:(NSString*)key {
   CHECK_FOR_EGOCACHE_PLIST();
 

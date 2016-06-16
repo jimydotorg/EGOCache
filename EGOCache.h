@@ -41,6 +41,7 @@
 - (id)initWithCacheDirectory:(NSString*)cacheDirectory;
 
 - (void)clearCache;
+- (void)pruneCache;
 - (void)removeCacheForKey:(NSString*)key;
 
 - (BOOL)hasCacheForKey:(NSString*)key;
